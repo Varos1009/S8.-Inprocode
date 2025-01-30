@@ -37,14 +37,20 @@ export const DataProvider = ({ children }) => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(newPlayer),
+                body: JSON.stringify(newPlayer),  // Make sure id is not included here!
             });
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Failed to create player");
+            }
             const createdPlayer = await response.json();
             setPlayers((prev) => [...prev, createdPlayer]);
         } catch (err) {
-            setError("Failed to create player");
+            setError(err.message);
         }
     };
+    
 
     // Update an existing player
     const updatePlayer = async (id, updatedPlayer) => {

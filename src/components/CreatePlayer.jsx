@@ -1,29 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { usePlayers } from "../context/crudContext";
 
-
-const EditPlayer = () => {
-    const { id } = useParams();  // Get player ID from URL
+const CreatePlayer = () => {
     const navigate = useNavigate();
-    const { players, updatePlayer } = usePlayers();
-    const [error, setError] = useState("");
+    const { players, createPlayer } = usePlayers();
     const [showModal, setShowModal] = useState(false);
 
-    // Find player data from context
-    const existingPlayer = players.find((player) => player._id === id);
-    const [formData, setFormData] = useState(existingPlayer || {});
-
-    // ✅ Prevent infinite re-renders by checking if the data actually changes
-    useEffect(() => {
-        if (existingPlayer && existingPlayer._id !== formData._id) {
-            setFormData(existingPlayer);
-        }
-    }, [existingPlayer]);
+    const [formData, setFormData] = useState({
+        name: "",
+        position: "",
+        dorsal: "",
+        age: "",
+        nationality: "",
+        id: `${players.length + 1}`,
+    });
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-        setError("");
     };
 
     const handleSubmit = async (e) => {
@@ -31,26 +25,25 @@ const EditPlayer = () => {
 
         // Check if dorsal number is already taken
         const duplicateDorsal = players.some(
-            (player) => player.dorsal === Number(formData.dorsal) && player._id !== id
+            (player) => player.dorsal === Number(formData.dorsal)
         );
 
         if (duplicateDorsal) {
-            setShowModal(true); // Show modal if duplicate dorsal number exists
+            setShowModal(true);
             return;
         }
 
         try {
-            await updatePlayer(id, formData);
-            navigate("/");
+            await createPlayer(formData);
+            navigate("/"); // Redirect to homepage
         } catch (err) {
-            setError("Error updating player.");
+            console.error("Error creating player:", err);
         }
     };
 
-
     return (
-        <div className="container mt-1">
-            <h2 className="text-center">Edit Player</h2>
+        <div className="container mt-3">
+            <h2 className="text-center">Create Player</h2>
             <form onSubmit={handleSubmit} className="p-4 cardFCB shadow rounded bg-light">
                 <div className="mb-2">
                     <label className="form-label">Name:</label>
@@ -58,7 +51,7 @@ const EditPlayer = () => {
                         type="text"
                         className="form-control"
                         name="name"
-                        value={formData.name || ""}
+                        value={formData.name}
                         onChange={handleChange}
                         required
                     />
@@ -69,7 +62,7 @@ const EditPlayer = () => {
                         type="text"
                         className="form-control"
                         name="position"
-                        value={formData.position || ""}
+                        value={formData.position}
                         onChange={handleChange}
                         required
                     />
@@ -78,13 +71,12 @@ const EditPlayer = () => {
                     <label className="form-label">Dorsal Number:</label>
                     <input
                         type="number"
-                        className={`form-control ${error ? "is-invalid" : ""}`}
+                        className="form-control"
                         name="dorsal"
-                        value={formData.dorsal || ""}
+                        value={formData.dorsal}
                         onChange={handleChange}
                         required
                     />
-                    {error && <div className="invalid-feedback">{error}</div>}
                 </div>
                 <div className="mb-2">
                     <label className="form-label">Age:</label>
@@ -92,7 +84,7 @@ const EditPlayer = () => {
                         type="number"
                         className="form-control"
                         name="age"
-                        value={formData.age || ""}
+                        value={formData.age}
                         onChange={handleChange}
                         required
                     />
@@ -103,19 +95,20 @@ const EditPlayer = () => {
                         type="text"
                         className="form-control"
                         name="nationality"
-                        value={formData.nationality || ""}
+                        value={formData.nationality}
                         onChange={handleChange}
                         required
                     />
                 </div>
                 <div className="d-flex justify-content-center">
-                    <button type="submit" className="btn btn-primary me-2">Update</button>
+                    <button type="submit" className="btn btn-primary me-2">Create</button>
                     <button type="button" className="btn btn-danger" onClick={() => navigate("/")}>
                         Cancel
                     </button>
                 </div>
             </form>
 
+            {/* Bootstrap Modal for Duplicate Dorsal */}
             {showModal && <div className="modal-backdrop fade show"></div>}
             {showModal && (
                 <div className="modal fade show d-block" tabIndex="-1">
@@ -141,4 +134,4 @@ const EditPlayer = () => {
     );
 };
 
-export default EditPlayer;
+export default CreatePlayer;
