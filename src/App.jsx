@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Map from "./pages/Map";
 import Calendar from "./pages/Calendar";
 import Charts from "./pages/Charts";
+import EditPlayer from "./components/EditPlayer";
 
 
 
@@ -16,6 +17,7 @@ function App() {
         <NavBar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/edit/:id" element={<EditPlayer />} />
           <Route path="/map" element={<Map />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/charts" element={<Charts />} />
