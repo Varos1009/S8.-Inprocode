@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { usePlayers } from "../context/crudContext";
-
+import { useData } from "../context/crudContext";
 
 const Home = () => {
-    const { players, loading, error, deletePlayer } = usePlayers();
+    const { players, loadingPlayers, errorPlayers, deletePlayer } = useData();
     const [showModal, setShowModal] = useState(false);
     const [playerToDelete, setPlayerToDelete] = useState(null);
 
@@ -17,7 +16,7 @@ const Home = () => {
     // Confirm and delete player
     const confirmDelete = async () => {
         if (playerToDelete) {
-            await deletePlayer(playerToDelete); // Ensure the delete request happens
+            await deletePlayer(playerToDelete);
         }
         setShowModal(false);
         setPlayerToDelete(null);
@@ -29,8 +28,8 @@ const Home = () => {
         setPlayerToDelete(null);
     };
 
-    if (loading) return <p className="text-center mt-3">Loading...</p>;
-    if (error) return <p className="text-center text-danger">{error}</p>;
+    if (loadingPlayers) return <p className="text-center mt-3">Loading...</p>;
+    if (errorPlayers) return <p className="text-center text-danger">{errorPlayers}</p>;
 
     return (
         <div>
@@ -64,35 +63,37 @@ const Home = () => {
                 </div>
 
                 {/* Delete Confirmation Modal */}
-                {showModal && <div className="modal-backdrop fade show"></div>}
                 {showModal && (
-                    <div className="modal show d-block" tabIndex="-1">
-                        <div className="modal-dialog modal-dialog-centered">
-                            <div className="modal-content ">
-                                <div className="modal-header">
-                                    <h5 className="modal-title">Confirm Deletion</h5>
-                                    <button type="button" className="btn-close" onClick={cancelDelete}></button>
-                                </div>
-                                <div className="modal-body">
-                                    <p>Are you sure you want to delete this player? This action cannot be undone.</p>
-                                </div>
-                                <div className="modal-footer">
-                                    <button type="button" className="btn btn-primary" onClick={cancelDelete}>
-                                        Cancel
-                                    </button>
-                                    <button type="button" className="btn btn-danger" onClick={confirmDelete}>
-                                        Delete
-                                    </button>
+                    <>
+                        <div className="modal-backdrop fade show"></div>
+                        <div className="modal show d-block" tabIndex="-1" aria-hidden={!showModal}>
+                            <div className="modal-dialog modal-dialog-centered">
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                        <h5 className="modal-title">Confirm Deletion</h5>
+                                        <button type="button" className="btn-close" onClick={cancelDelete}></button>
+                                    </div>
+                                    <div className="modal-body">
+                                        <p>Are you sure you want to delete this player? This action cannot be undone.</p>
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-primary" onClick={cancelDelete}>
+                                            Cancel
+                                        </button>
+                                        <button type="button" className="btn btn-danger" onClick={confirmDelete}>
+                                            Delete
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </>
                 )}
             </div>
             <div className="d-flex justify-content-center">
-            <Link to="/create" className="btn btn-primary cardFCB fs-5 fw-bold text-warning  bottom-0 end-0 m-3">
-                Add Player
-            </Link>
+                <Link to="/create" className="btn btn-primary cardFCB fs-5 fw-bold text-warning bottom-0 end-0 m-3">
+                    Add Player
+                </Link>
             </div>
         </div>
     );

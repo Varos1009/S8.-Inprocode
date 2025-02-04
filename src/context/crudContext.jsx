@@ -1,123 +1,259 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-// Create the context
-const AllContext = createContext();
+// Create context
+const DataContext = createContext();
 
 // Custom hook to use the context
-export const usePlayers = () => {
-    return useContext(AllContext);
+export const useData = () => {
+    return useContext(DataContext);
 };
 
 // Provider component
 export const DataProvider = ({ children }) => {
+    // State for players
     const [players, setPlayers] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [loadingPlayers, setLoadingPlayers] = useState(false);
+    const [errorPlayers, setErrorPlayers] = useState(null);
 
-    // Fetch all players
+    // State for stadium locations
+    const [places, setPlaces] = useState([]);
+    const [loadingPlaces, setLoadingPlaces] = useState(false);
+    const [errorPlaces, setErrorPlaces] = useState(null);
+
+    // State for events
+    const [events, setEvents] = useState([]);
+    const [loadingEvents, setLoadingEvents] = useState(false);
+    const [errorEvents, setErrorEvents] = useState(null);
+
+    // 🔹 Fetch all players
     const fetchPlayers = async () => {
-        setLoading(true);
+        setLoadingPlayers(true);
         try {
             const response = await fetch("http://localhost:5000/players");
             const data = await response.json();
             setPlayers(data);
-            setError(null);
+            setErrorPlayers(null);
         } catch (err) {
-            setError("Failed to fetch players");
+            setErrorPlayers("Failed to fetch players");
         } finally {
-            setLoading(false);
+            setLoadingPlayers(false);
         }
     };
 
-    // Create a new player
+    // 🔹 Create a new player
     const createPlayer = async (newPlayer) => {
         try {
             const response = await fetch("http://localhost:5000/players", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(newPlayer),  // Make sure id is not included here!
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newPlayer),
             });
-    
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || "Failed to create player");
-            }
+
+            if (!response.ok) throw new Error("Failed to create player");
             const createdPlayer = await response.json();
             setPlayers((prev) => [...prev, createdPlayer]);
         } catch (err) {
-            setError(err.message);
+            setErrorPlayers(err.message);
         }
     };
-    
 
-    // Update an existing player
+    // 🔹 Update an existing player
     const updatePlayer = async (id, updatedPlayer) => {
         try {
-            // Ensure the ID passed is a valid MongoDB ObjectId format.
-            console.log("Updating player with ID:", id);  // Log the ID to check its format
             const response = await fetch(`http://localhost:5000/players/${id}`, {
                 method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(updatedPlayer),
             });
-    
-            if (!response.ok) {
-                throw new Error("Error updating player");
-            }
-    
+
+            if (!response.ok) throw new Error("Failed to update player");
             const updatedData = await response.json();
             setPlayers((prev) =>
                 prev.map((player) => (player._id === id ? updatedData : player))
             );
         } catch (err) {
-            console.error("Update error:", err);
-            setError("Failed to update player");
+            setErrorPlayers("Failed to update player");
         }
     };
-    
 
-    // Delete a player
+    // 🔹 Delete a player
     const deletePlayer = async (id) => {
-        console.log("Deleting player with ID:", id);  // Log the ID to check its format
         try {
             const response = await fetch(`http://localhost:5000/players/${id}`, {
                 method: "DELETE",
             });
-    
-            if (!response.ok) {
-                throw new Error("Error deleting player");
-            }
-    
+
+            if (!response.ok) throw new Error("Failed to delete player");
             setPlayers((prev) => prev.filter((player) => player._id !== id));
         } catch (err) {
-            console.error("Delete error:", err);
-            setError("Failed to delete player");
+            setErrorPlayers("Failed to delete player");
         }
     };
-    
+
+    // 🔹 Fetch all stadium locations
+    const fetchPlaces = async () => {
+        setLoadingPlaces(true);
+        try {
+            const response = await fetch("http://localhost:5000/map");
+            const data = await response.json();
+            setPlaces(data);
+            setErrorPlaces(null);
+        } catch (err) {
+            setErrorPlaces("Failed to fetch places");
+        } finally {
+            setLoadingPlaces(false);
+        }
+    };
+
+    // 🔹 Create a new stadium
+    const createPlace = async (newPlace) => {
+        try {
+            const response = await fetch("http://localhost:5000/map", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newPlace),
+            });
+
+            if (!response.ok) throw new Error("Failed to create place");
+            const createdPlace = await response.json();
+            setPlaces((prev) => [...prev, createdPlace]);
+        } catch (err) {
+            setErrorPlaces(err.message);
+        }
+    };
+
+    // 🔹 Update a stadium
+    const updatePlace = async (id, updatedPlace) => {
+        try {
+            const response = await fetch(`http://localhost:5000/map/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(updatedPlace),
+            });
+
+            if (!response.ok) throw new Error("Failed to update place");
+            const updatedData = await response.json();
+            setPlaces((prev) =>
+                prev.map((place) => (place._id === id ? updatedData : place))
+            );
+        } catch (err) {
+            setErrorPlaces("Failed to update place");
+        }
+    };
+
+    // 🔹 Delete a stadium
+    const deletePlace = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:5000/map${id}`, {
+                method: "DELETE",
+            });
+
+            if (!response.ok) throw new Error("Failed to delete place");
+            setPlaces((prev) => prev.filter((place) => place._id !== id));
+        } catch (err) {
+            setErrorPlaces("Failed to delete place");
+        }
+    };
+    // 🔹 Fetch all events
+    const fetchEvents = async () => {
+        setLoadingEvents(true);
+        try {
+            const response = await fetch("http://localhost:5000/event");
+            const data = await response.json();
+            setEvents(data);
+            setErrorEvents(null);
+        } catch (err) {
+            setErrorEvents("Failed to fetch events");
+        } finally {
+            setLoadingEvents(false);
+        }
+    };
+
+    // 🔹 Add a new event
+    const addEvent = async (newEvent) => {
+        try {
+            const response = await fetch("http://localhost:5000/event", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newEvent),
+            });
+
+            if (!response.ok) throw new Error("Failed to add event");
+            const createdEvent = await response.json();
+            setEvents((prev) => [...prev, createdEvent]);
+        } catch (err) {
+            setErrorEvents(err.message);
+        }
+    };
+
+    // 🔹 Update an existing event
+    const updateEvent = async (id, updatedEvent) => {
+        try {
+            const response = await fetch(`http://localhost:5000/event/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(updatedEvent),
+            });
+
+            if (!response.ok) throw new Error("Failed to update event");
+            const updatedData = await response.json();
+            setEvents((prev) =>
+                prev.map((event) => (event._id === id ? updatedData : event))
+            );
+        } catch (err) {
+            setErrorEvents("Failed to update event");
+        }
+    };
+
+    // 🔹 Delete an event
+    const deleteEvent = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:5000/event/${id}`, {
+                method: "DELETE",
+            });
+
+            if (!response.ok) throw new Error("Failed to delete event");
+            setEvents((prev) => prev.filter((event) => event._id !== id));
+        } catch (err) {
+            setErrorEvents("Failed to delete event");
+        }
+    };
 
 
+    // Fetch data when component mounts
     useEffect(() => {
         fetchPlayers();
+        fetchPlaces();
+        fetchEvents();
     }, []);
 
     return (
-        <AllContext.Provider
+        <DataContext.Provider
             value={{
                 players,
-                loading,
-                error,
+                loadingPlayers,
+                errorPlayers,
                 fetchPlayers,
                 createPlayer,
                 updatePlayer,
                 deletePlayer,
+                places,
+                loadingPlaces,
+                errorPlaces,
+                fetchPlaces,
+                createPlace,
+                updatePlace,
+                deletePlace,
+                events,
+                loadingEvents,
+                errorEvents,
+                fetchEvents,
+                addEvent,
+                updateEvent,
+                deleteEvent
             }}
         >
             {children}
-        </AllContext.Provider>
+        </DataContext.Provider>
     );
 };

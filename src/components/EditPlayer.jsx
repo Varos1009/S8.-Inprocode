@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { usePlayers } from "../context/crudContext";
+import { useData } from "../context/crudContext";
 
 
 const EditPlayer = () => {
     const { id } = useParams();  // Get player ID from URL
     const navigate = useNavigate();
-    const { players, updatePlayer } = usePlayers();
+    const { players, updatePlayer } = useData();
     const [error, setError] = useState("");
     const [showModal, setShowModal] = useState(false);
 

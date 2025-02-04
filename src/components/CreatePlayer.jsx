@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { usePlayers } from "../context/crudContext";
+import { useData } from "../context/crudContext";
 
 const CreatePlayer = () => {
     const navigate = useNavigate();
-    const { players, createPlayer } = usePlayers();
+    const { players, createPlayer } = useData();
     const [showModal, setShowModal] = useState(false);
 
     const [formData, setFormData] = useState({
