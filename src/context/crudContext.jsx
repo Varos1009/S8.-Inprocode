@@ -170,7 +170,7 @@ export const DataProvider = ({ children }) => {
     };
 
     // 🔹 Add a new event
-    const addEvent = async (newEvent) => {
+    const createEvent = async (newEvent) => {
         try {
             const response = await fetch("http://localhost:5000/event", {
                 method: "POST",
@@ -248,7 +248,7 @@ export const DataProvider = ({ children }) => {
                 loadingEvents,
                 errorEvents,
                 fetchEvents,
-                addEvent,
+                createEvent,
                 updateEvent,
                 deleteEvent
             }}
