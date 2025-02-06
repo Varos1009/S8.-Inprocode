@@ -172,12 +172,18 @@ export const DataProvider = ({ children }) => {
     // 🔹 Add a new event
     const createEvent = async (newEvent) => {
         try {
+            // Ensure the date is a string in ISO 8601 format
+            const formattedEvent = {
+                ...newEvent,
+                date: new Date(newEvent.date).toISOString(), // Convert to ISO string
+            };
+    
             const response = await fetch("http://localhost:5000/event", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newEvent),
+                body: JSON.stringify(formattedEvent),
             });
-
+    
             if (!response.ok) throw new Error("Failed to add event");
             const createdEvent = await response.json();
             setEvents((prev) => [...prev, createdEvent]);
@@ -185,6 +191,7 @@ export const DataProvider = ({ children }) => {
             setErrorEvents(err.message);
         }
     };
+    
 
     // 🔹 Update an existing event
     const updateEvent = async (id, updatedEvent) => {
@@ -211,13 +218,16 @@ export const DataProvider = ({ children }) => {
             const response = await fetch(`http://localhost:5000/event/${id}`, {
                 method: "DELETE",
             });
-
+    
             if (!response.ok) throw new Error("Failed to delete event");
+    
             setEvents((prev) => prev.filter((event) => event._id !== id));
         } catch (err) {
             setErrorEvents("Failed to delete event");
         }
     };
+    
+    
 
 
     // Fetch data when component mounts

@@ -30,4 +30,37 @@ body {
   width: 100%;
 }
 
+.event-dot {
+  width: 8px;
+  height: 8px;
+  background-color: red;
+  border-radius: 50%;
+  margin: auto;
+  cursor: pointer;
+}
+
+.event-title {
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .fc-toolbar-chunk {
+      flex-wrap: wrap;
+      justify-content: center;
+  }
+
+  .fc-toolbar-title {
+      font-size: 1rem;
+  }
+
+  .event-dot {
+      width: 6px;
+      height: 6px;
+  }
+}
+
 
