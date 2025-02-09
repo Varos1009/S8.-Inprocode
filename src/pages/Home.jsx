@@ -68,12 +68,12 @@ const Home = () => {
                         <div className="modal-backdrop fade show"></div>
                         <div className="modal show d-block" tabIndex="-1" aria-hidden={!showModal}>
                             <div className="modal-dialog modal-dialog-centered">
-                                <div className="modal-content">
+                                <div className="modal-content cardFCB">
                                     <div className="modal-header">
-                                        <h5 className="modal-title">Confirm Deletion</h5>
-                                        <button type="button" className="btn-close" onClick={cancelDelete}></button>
+                                        <h5 className="modal-title text-white">Confirm Deletion</h5>
+                                        <button type="button" className="btn-close btn-close-white" onClick={cancelDelete}></button>
                                     </div>
-                                    <div className="modal-body">
+                                    <div className="modal-body text-white">
                                         <p>Are you sure you want to delete this player? This action cannot be undone.</p>
                                     </div>
                                     <div className="modal-footer">

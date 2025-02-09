@@ -113,12 +113,12 @@ const CreatePlayer = () => {
             {showModal && (
                 <div className="modal fade show d-block" tabIndex="-1">
                     <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
+                        <div className="modal-content cardFCB">
                             <div className="modal-header">
-                                <h5 className="modal-title">Dorsal Number Error</h5>
-                                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                                <h5 className="modal-title text-white">Dorsal Number Error</h5>
+                                <button type="button" className="btn-close btn-close-white" onClick={() => setShowModal(false)}></button>
                             </div>
-                            <div className="modal-body">
+                            <div className="modal-body text-white">
                                 <p>The dorsal number is already taken by another player. Please choose a different number.</p>
                             </div>
                             <div className="modal-footer">
