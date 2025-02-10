@@ -29,7 +29,7 @@ export const DataProvider = ({ children }) => {
     const fetchPlayers = async () => {
         setLoadingPlayers(true);
         try {
-            const response = await fetch("http://localhost:5000/players");
+            const response = await fetch("https://s8-nodeapp.onrender.com/players");
             const data = await response.json();
             setPlayers(data);
             setErrorPlayers(null);
@@ -43,7 +43,7 @@ export const DataProvider = ({ children }) => {
     // 🔹 Create a new player
     const createPlayer = async (newPlayer) => {
         try {
-            const response = await fetch("http://localhost:5000/players", {
+            const response = await fetch("https://s8-nodeapp.onrender.com/players", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(newPlayer),
@@ -60,7 +60,7 @@ export const DataProvider = ({ children }) => {
     // 🔹 Update an existing player
     const updatePlayer = async (id, updatedPlayer) => {
         try {
-            const response = await fetch(`http://localhost:5000/players/${id}`, {
+            const response = await fetch(`https://s8-nodeapp.onrender.com/players/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(updatedPlayer),
@@ -79,7 +79,7 @@ export const DataProvider = ({ children }) => {
     // 🔹 Delete a player
     const deletePlayer = async (id) => {
         try {
-            const response = await fetch(`http://localhost:5000/players/${id}`, {
+            const response = await fetch(`https://s8-nodeapp.onrender.com/players/${id}`, {
                 method: "DELETE",
             });
 
@@ -94,7 +94,7 @@ export const DataProvider = ({ children }) => {
     const fetchPlaces = async () => {
         setLoadingPlaces(true);
         try {
-            const response = await fetch("http://localhost:5000/map");
+            const response = await fetch("https://s8-nodeapp.onrender.com/map");
             const data = await response.json();
             setPlaces(data);
             setErrorPlaces(null);
@@ -108,7 +108,7 @@ export const DataProvider = ({ children }) => {
     // 🔹 Create a new stadium
     const createPlace = async (newPlace) => {
         try {
-            const response = await fetch("http://localhost:5000/map", {
+            const response = await fetch("https://s8-nodeapp.onrender.com/map", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(newPlace),
@@ -125,7 +125,7 @@ export const DataProvider = ({ children }) => {
     // 🔹 Update a stadium
     const updatePlace = async (id, updatedPlace) => {
         try {
-            const response = await fetch(`http://localhost:5000/map/${id}`, {
+            const response = await fetch(`https://s8-nodeapp.onrender.com/map/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(updatedPlace),
@@ -144,7 +144,7 @@ export const DataProvider = ({ children }) => {
     // 🔹 Delete a stadium
     const deletePlace = async (id) => {
         try {
-            const response = await fetch(`http://localhost:5000/map${id}`, {
+            const response = await fetch(`https://s8-nodeapp.onrender.com/map${id}`, {
                 method: "DELETE",
             });
 
@@ -158,7 +158,7 @@ export const DataProvider = ({ children }) => {
     const fetchEvents = async () => {
         setLoadingEvents(true);
         try {
-            const response = await fetch("http://localhost:5000/event");
+            const response = await fetch("https://s8-nodeapp.onrender.com/event");
             const data = await response.json();
             setEvents(data);
             setErrorEvents(null);
@@ -177,13 +177,13 @@ export const DataProvider = ({ children }) => {
                 ...newEvent,
                 date: new Date(newEvent.date).toISOString(), // Convert to ISO string
             };
-    
-            const response = await fetch("http://localhost:5000/event", {
+
+            const response = await fetch("https://s8-nodeapp.onrender.com/event", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formattedEvent),
             });
-    
+
             if (!response.ok) throw new Error("Failed to add event");
             const createdEvent = await response.json();
             setEvents((prev) => [...prev, createdEvent]);
@@ -191,12 +191,12 @@ export const DataProvider = ({ children }) => {
             setErrorEvents(err.message);
         }
     };
-    
+
 
     // 🔹 Update an existing event
     const updateEvent = async (id, updatedEvent) => {
         try {
-            const response = await fetch(`http://localhost:5000/event/${id}`, {
+            const response = await fetch(`https://s8-nodeapp.onrender.com/event/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(updatedEvent),
@@ -215,19 +215,19 @@ export const DataProvider = ({ children }) => {
     // 🔹 Delete an event
     const deleteEvent = async (id) => {
         try {
-            const response = await fetch(`http://localhost:5000/event/${id}`, {
+            const response = await fetch(`https://s8-nodeapp.onrender.com/event/${id}`, {
                 method: "DELETE",
             });
-    
+
             if (!response.ok) throw new Error("Failed to delete event");
-    
+
             setEvents((prev) => prev.filter((event) => event._id !== id));
         } catch (err) {
             setErrorEvents("Failed to delete event");
         }
     };
-    
-    
+
+
 
 
     // Fetch data when component mounts
