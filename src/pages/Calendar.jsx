@@ -163,9 +163,9 @@ const Calendar = () => {
 
     const renderEventContent = (eventInfo) => {
         return screenSize < 768 ? (
-            <div className="bg-danger" onClick={() => openEventModal(eventInfo.event)}>⚪</div>
+            <div className="bg-danger" onClick={() => openEventModal(eventInfo.event)} role="button">⚪</div>
         ) : (
-            <div className="event-title" onClick={() => openEventModal(eventInfo.event)}>
+            <div className="event-title" onClick={() => openEventModal(eventInfo.event)} role="button">
                 <strong>{eventInfo.event.title}</strong>
                 <br />
                 {eventInfo.event.extendedProps.time}

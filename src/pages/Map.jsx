@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useData } from "../context/crudContext";
 
 
-const Map = () => {
+const MyMap = () => {
     const { places, loadingPlaces, errorPlaces, fetchPlaces } = useData();
     
     const [minCapacity, setMinCapacity] = useState("");
@@ -91,4 +91,4 @@ const Map = () => {
     );
 };
 
-export default Map;
+export default MyMap;
